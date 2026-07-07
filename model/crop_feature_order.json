@@ -1,0 +1,23 @@
+{
+  "numeric_features": [
+    "N",
+    "P",
+    "K",
+    "temperature",
+    "humidity",
+    "ph",
+    "rainfall"
+  ],
+  "feature_order": [
+    "N",
+    "P",
+    "K",
+    "temperature",
+    "humidity",
+    "ph",
+    "rainfall",
+    "season_enc",
+    "soil_enc"
+  ],
+  "accuracy": 95.0
+}
