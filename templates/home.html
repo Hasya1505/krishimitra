@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — KrishiMitra</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+  html, body { height: 100%; margin: 0; }
+  .layout { display: flex; height: 100vh; }
+  .sidebar {
+    width: 240px; background: var(--green-dark); color: #fff; flex-shrink: 0;
+    display: flex; flex-direction: column; padding: 24px 0;
+  }
+  .sidebar .logo { padding: 0 24px 24px; font-weight: 700; font-size: 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.15); }
+  .sidebar .logo span { color: var(--gold); }
+  .sidebar .user-chip { padding: 16px 24px; font-size: 0.85rem; color: #cfe3d5; border-bottom: 1px solid rgba(255,255,255,0.15); }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px; padding: 14px 24px; cursor: pointer;
+    color: #d8e8dc; font-weight: 500; border-left: 4px solid transparent; transition: all .15s ease;
+  }
+  .nav-item i { width: 18px; }
+  .nav-item:hover { background: rgba(255,255,255,0.06); }
+  .nav-item.active { background: rgba(255,255,255,0.1); border-left-color: var(--gold); color: #fff; }
+  .nav-footer { margin-top: auto; padding: 16px 24px; }
+  .main-area { flex: 1; display: flex; flex-direction: column; }
+  .topbar { background: #fff; padding: 14px 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display:flex; justify-content: space-between; align-items:center;}
+  .topbar h3 { margin: 0; }
+  iframe { flex: 1; border: none; width: 100%; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="sidebar">
+    <div class="logo">🌾 Krishi<span>Mitra</span></div>
+    <div class="user-chip"><i class="fa-solid fa-user"></i> {{ user.name }}</div>
+    <div class="nav-item active" data-src="{{ url_for('main.crop_page') }}" data-title="Crop Recommendation">
+      <i class="fa-solid fa-seedling"></i> Crop Recommendation
+    </div>
+    <div class="nav-item" data-src="{{ url_for('main.soil_page') }}" data-title="Soil Analysis">
+      <i class="fa-solid fa-flask"></i> Soil Analysis
+    </div>
+    <div class="nav-item" data-src="{{ url_for('main.weather_page') }}" data-title="Weather">
+      <i class="fa-solid fa-cloud-sun-rain"></i> Weather
+    </div>
+    <div class="nav-footer">
+      <a href="{{ url_for('auth.logout') }}" class="btn btn-outline" style="width:100%; text-align:center; display:block;">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </div>
+  </div>
+  <div class="main-area">
+    <div class="topbar"><h3 id="panel-title">Crop Recommendation</h3></div>
+    <iframe id="content-frame" src="{{ url_for('main.crop_page') }}"></iframe>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    document.getElementById('content-frame').src = item.dataset.src;
+    document.getElementById('panel-title').textContent = item.dataset.title;
+  });
+});
+</script>
+</body>
+</html>

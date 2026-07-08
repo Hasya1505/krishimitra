@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soil Analysis — KrishiMitra</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    color: #fff; padding: 28px; border-radius: var(--radius); margin-bottom: 24px;
+  }
+  .page-header h2 { color: #fff; margin-bottom: 4px; }
+  .page-header p { color: #dcefe1; margin: 0; }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+  #soil-ph-value { font-weight: 600; color: var(--green-mid); }
+  .micro-checks { display: flex; flex-wrap: wrap; gap: 10px; }
+  .micro-checks label { display: flex; align-items: center; gap: 6px; background: var(--cream); padding: 8px 12px; border-radius: 8px; font-weight: 500; cursor:pointer; }
+  .micro-checks input { width: auto; }
+  #loading { display: none; text-align: center; padding: 30px 0; }
+  #error-box { display: none; }
+
+  .gauge-wrap { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .gauge-num { font-size: 2.2rem; font-weight: 700; }
+  .health-green { color: var(--green-mid); }
+  .health-yellow { color: var(--warning); }
+  .health-red { color: var(--danger); }
+  .comp-bar-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .comp-bar-row .label { width: 130px; font-size: 0.85rem; color: var(--text-secondary); }
+  .step-card { display:flex; gap:12px; padding: 14px 0; border-bottom: 1px solid #eee; }
+  .step-card:last-child { border-bottom: none; }
+  .step-num { background: var(--green-mid); color:#fff; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem; flex-shrink:0; }
+  @media print {
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container" style="padding-top:24px; padding-bottom: 40px;">
+  <div class="page-header">
+    <h2><i class="fa-solid fa-flask"></i> Soil Analysis</h2>
+    <p>Enter your soil test values to get a health score and improvement plan.</p>
+  </div>
+
+  <div class="card no-print">
+    <form id="soil-form">
+      <div class="form-grid">
+        <div class="field">
+          <label>Intended Crop</label>
+          <select id="crop" name="crop"></select>
+        </div>
+        <div class="field">
+          <label>Soil Type</label>
+          <select id="soil_type" name="soil_type" required>
+            <option value="Alluvial">Alluvial</option>
+            <option value="Black">Black</option>
+            <option value="Red">Red</option>
+            <option value="Laterite">Laterite</option>
+            <option value="Desert">Desert</option>
+            <option value="Mountain">Mountain</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Nitrogen (N) kg/ha</label>
+          <input type="number" id="N" min="0" max="150" step="0.1" required value="60">
+        </div>
+        <div class="field">
+          <label>Phosphorus (P) kg/ha</label>
+          <input type="number" id="P" min="0" max="150" step="0.1" required value="40">
+        </div>
+        <div class="field">
+          <label>Potassium (K) kg/ha</label>
+          <input type="number" id="K" min="0" max="210" step="0.1" required value="45">
+        </div>
+        <div class="field">
+          <label>pH (<span id="soil-ph-value">6.5</span>)</label>
+          <input type="range" id="ph" min="3.5" max="9.0" step="0.1" value="6.5"
+                 oninput="document.getElementById('soil-ph-value').textContent = this.value">
+        </div>
+        <div class="field">
+          <label>Organic Carbon (%)</label>
+          <input type="number" id="organic_carbon" min="0.1" max="3.0" step="0.01" required value="0.6">
+        </div>
+        <div class="field">
+          <label>EC (dS/m)</label>
+          <input type="number" id="ec" min="0" max="4" step="0.01" required value="0.8">
+        </div>
+        <div class="field">
+          <label>Moisture Retention</label>
+          <select id="moisture_retention">
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="margin-top:6px;">
+        <label>Micronutrient Deficiency (check any known deficiencies)</label>
+        <div class="micro-checks">
+          <label><input type="checkbox" value="Zn"> Zinc (Zn)</label>
+          <label><input type="checkbox" value="Fe"> Iron (Fe)</label>
+          <label><input type="checkbox" value="Mn"> Manganese (Mn)</label>
+          <label><input type="checkbox" value="Cu"> Copper (Cu)</label>
+          <label><input type="checkbox" value="B"> Boron (B)</label>
+        </div>
+      </div>
+      <button type="submit" class="btn" style="margin-top:16px;"><i class="fa-solid fa-magnifying-glass"></i> Analyse Soil</button>
+    </form>
+  </div>
+
+  <div id="loading">
+    <div class="loader"></div>
+    <p>Analysing soil composition…</p>
+  </div>
+
+  <div id="error-box" class="flash flash-error"></div>
+
+  <div id="results"></div>
+</div>
+
+<script src="{{ url_for('static', filename='js/soil.js') }}"></script>
+</body>
+</html>

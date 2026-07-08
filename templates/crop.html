@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crop Recommendation — KrishiMitra</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    color: #fff; padding: 28px; border-radius: var(--radius); margin-bottom: 24px;
+  }
+  .page-header h2 { color: #fff; margin-bottom: 4px; }
+  .page-header p { color: #dcefe1; margin: 0; }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+  #ph-value { font-weight: 600; color: var(--green-mid); }
+  .crop-result-card { display: flex; gap: 16px; align-items: flex-start; }
+  .crop-result-card .emoji { font-size: 2.4rem; }
+  .crop-result-card .conf-label { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px; }
+  #results { margin-top: 28px; }
+  #loading { display: none; text-align: center; padding: 30px 0; }
+</style>
+</head>
+<body>
+<div class="container" style="padding-top:24px; padding-bottom: 40px;">
+  <div class="page-header">
+    <h2><i class="fa-solid fa-seedling"></i> Crop Recommendation</h2>
+    <p>Enter your field's soil and location details to get the top 5 recommended crops.</p>
+  </div>
+
+  <div class="card">
+    <form id="crop-form">
+      <div class="form-grid">
+        <div class="field">
+          <label>State</label>
+          <select id="state" name="state" required><option value="">Select State</option></select>
+        </div>
+        <div class="field">
+          <label>District</label>
+          <select id="district" name="district" required><option value="">Select District</option></select>
+        </div>
+        <div class="field">
+          <label>Season</label>
+          <select id="season" name="season" required>
+            <option value="Kharif">Kharif (Jun–Oct)</option>
+            <option value="Rabi">Rabi (Nov–Mar)</option>
+            <option value="Zaid">Zaid (Apr–Jun)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Soil Type</label>
+          <select id="soil_type" name="soil_type" required>
+            <option value="Alluvial">Alluvial</option>
+            <option value="Black">Black</option>
+            <option value="Red">Red</option>
+            <option value="Laterite">Laterite</option>
+            <option value="Desert">Desert</option>
+            <option value="Mountain">Mountain</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Nitrogen (N) kg/ha</label>
+          <input type="number" id="N" name="N" min="0" max="150" step="0.1" required value="60">
+        </div>
+        <div class="field">
+          <label>Phosphorus (P) kg/ha</label>
+          <input type="number" id="P" name="P" min="0" max="150" step="0.1" required value="40">
+        </div>
+        <div class="field">
+          <label>Potassium (K) kg/ha</label>
+          <input type="number" id="K" name="K" min="0" max="210" step="0.1" required value="40">
+        </div>
+        <div class="field">
+          <label>pH (<span id="ph-value">6.5</span>)</label>
+          <input type="range" id="ph" name="ph" min="3.5" max="9.0" step="0.1" value="6.5"
+                 oninput="document.getElementById('ph-value').textContent = this.value">
+        </div>
+        <div class="field">
+          <label>Temperature (°C)</label>
+          <input type="number" id="temperature" name="temperature" step="0.1" required value="25">
+        </div>
+        <div class="field">
+          <label>Humidity (%)</label>
+          <input type="number" id="humidity" name="humidity" min="0" max="100" step="0.1" required value="70">
+        </div>
+        <div class="field">
+          <label>Annual Rainfall (mm)</label>
+          <input type="number" id="rainfall" name="rainfall" min="0" step="0.1" required value="100">
+        </div>
+      </div>
+      <button type="submit" class="btn" style="margin-top:10px;"><i class="fa-solid fa-magnifying-glass"></i> Get Recommendation</button>
+    </form>
+  </div>
+
+  <div id="loading">
+    <div class="loader"></div>
+    <p>Running ensemble model (RandomForest + GradientBoosting + XGBoost)…</p>
+  </div>
+
+  <div id="error-box" style="display:none;" class="flash flash-error"></div>
+
+  <div id="results"></div>
+</div>
+
+<script src="{{ url_for('static', filename='js/crop.js') }}"></script>
+</body>
+</html>

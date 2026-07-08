@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — KrishiMitra</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+  body {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    padding: 24px;
+  }
+  .auth-wrap { width: 100%; max-width: 440px; }
+  .auth-wrap .logo { text-align: center; color: #fff; font-size: 1.6rem; font-weight: 700; margin-bottom: 24px; }
+  .auth-wrap .logo span { color: var(--gold); }
+  .tabs { display: flex; margin-bottom: 24px; border-radius: 8px; overflow: hidden; border: 1.5px solid var(--green-mid); }
+  .tab-btn { flex: 1; padding: 12px; text-align: center; cursor: pointer; font-weight: 600; background: #fff; color: var(--green-mid); }
+  .tab-btn.active { background: var(--green-mid); color: #fff; }
+  .form-panel { display: none; }
+  .form-panel.active { display: block; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="logo">🌾 Krishi<span>Mitra</span></div>
+  <div class="card">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ 'error' if category == 'error' else 'ok' }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="tabs">
+      <div class="tab-btn active" data-tab="login-panel">Login</div>
+      <div class="tab-btn" data-tab="register-panel">Register</div>
+    </div>
+
+    <div id="login-panel" class="form-panel active">
+      <form method="POST" action="{{ url_for('auth.login') }}">
+        <input type="hidden" name="action" value="login">
+        <div class="field">
+          <label>Phone or Email</label>
+          <input type="text" name="identifier" required placeholder="you@example.com or 9876543210">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" name="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn" style="width:100%;">Login</button>
+      </form>
+    </div>
+
+    <div id="register-panel" class="form-panel">
+      <form method="POST" action="{{ url_for('auth.login') }}">
+        <input type="hidden" name="action" value="register">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" name="name" required placeholder="Ramesh Kumar">
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>Phone</label>
+            <input type="text" name="phone" placeholder="9876543210">
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="you@example.com">
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>State</label>
+            <select name="state" id="reg-state"><option value="">Select State</option></select>
+          </div>
+          <div class="field">
+            <label>District</label>
+            <select name="district" id="reg-district"><option value="">Select District</option></select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" name="password" required placeholder="Create a password">
+        </div>
+        <button type="submit" class="btn" style="width:100%;">Create Account</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// Populate state/district dropdowns from the shared JSON map
+fetch("{{ url_for('static', filename='assets/india_states_districts.json') }}")
+  .then(r => r.json())
+  .then(map => {
+    const stateSel = document.getElementById('reg-state');
+    const distSel = document.getElementById('reg-district');
+    Object.keys(map).sort().forEach(state => {
+      const opt = document.createElement('option');
+      opt.value = state; opt.textContent = state;
+      stateSel.appendChild(opt);
+    });
+    stateSel.addEventListener('change', () => {
+      distSel.innerHTML = '<option value="">Select District</option>';
+      (map[stateSel.value] || []).forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d; opt.textContent = d;
+        distSel.appendChild(opt);
+      });
+    });
+  });
+</script>
+</body>
+</html>

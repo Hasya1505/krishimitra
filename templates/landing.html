@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KrishiMitra — कृषि मित्र | Smart Farming for India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+  body { margin: 0; }
+  nav.topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 32px; background: rgba(26,77,46,0.92); backdrop-filter: blur(6px);
+  }
+  nav.topbar .logo { color: #f5f0e8; font-weight: 700; font-size: 1.3rem; }
+  nav.topbar .logo span { color: var(--gold); }
+  nav.topbar a.nav-login { color: #fff; border: 1.5px solid #fff; padding: 8px 20px; border-radius: 8px; }
+  nav.topbar a.nav-login:hover { background: #fff; color: var(--green-dark); text-decoration:none; }
+
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; color: #fff; position: relative; padding: 100px 24px 60px;
+    background: linear-gradient(rgba(10,40,20,0.55), rgba(10,40,20,0.65)),
+                url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+  }
+  .hero h1 { color: #fff; font-size: 3rem; margin-bottom: 0.3em; animation: fadeUp 1s ease; }
+  .hero .hindi { font-size: 1.4rem; color: var(--gold); margin-bottom: 1.5em; animation: fadeUp 1.3s ease; }
+  .hero p.desc { max-width: 600px; color: #eee; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px);} to {opacity:1; transform:translateY(0);} }
+  .scroll-hint { position: absolute; bottom: 24px; color: #fff; animation: bounce 2s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(10px)} }
+
+  section { padding: 80px 0; }
+  .section-title { text-align: center; margin-bottom: 48px; }
+  .section-title h2 { font-size: 2rem; }
+  .section-title p { max-width: 560px; margin: 0 auto; }
+
+  /* Timeline */
+  .timeline { position: relative; max-width: 800px; margin: 0 auto; padding-left: 40px; border-left: 3px solid var(--green-light); }
+  .timeline-item { position: relative; margin-bottom: 40px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -49px; top: 4px; width: 16px; height: 16px;
+    background: var(--gold); border-radius: 50%; border: 3px solid var(--green-dark);
+  }
+  .timeline-item h4 { margin-bottom: 4px; }
+  .timeline-item .year { color: var(--gold); font-weight: 600; }
+
+  /* Stats */
+  .stats-strip { background: var(--green-dark); padding: 48px 0; }
+  .stats-strip .grid-3 { text-align: center; }
+  .stat-num { font-size: 2.2rem; font-weight: 700; color: var(--gold); }
+  .stat-label { color: #e8e8e8; font-size: 0.95rem; }
+
+  /* Trend cards */
+  .trend-card { text-align: center; }
+  .trend-card i { font-size: 2.2rem; color: var(--green-mid); margin-bottom: 12px; }
+
+  /* News */
+  .news-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 8px 8px 0 0; }
+  .news-card { padding: 0; overflow: hidden; }
+  .news-card .body { padding: 16px; }
+  .news-card .source { color: var(--gold); font-size: 0.78rem; font-weight: 600; text-transform: uppercase; }
+  .news-card h4 { font-size: 1rem; margin: 8px 0; }
+  .news-card .date { color: #999; font-size: 0.78rem; }
+
+  /* Feature teaser */
+  .feature-card { text-align: center; border-top: 4px solid var(--green-mid); }
+  .feature-card i { font-size: 2rem; color: var(--green-mid); margin-bottom: 10px; }
+
+  footer { background: var(--green-dark); color: #ddd; text-align: center; padding: 40px 24px; }
+  footer a { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="logo">🌾 Krishi<span>Mitra</span></div>
+  <a class="nav-login" href="{{ url_for('auth.login') }}">Login / Register</a>
+</nav>
+
+<section class="hero">
+  <h1>Feeding India, One Smart Farm at a Time</h1>
+  <div class="hindi">भारतीय किसानों के लिए स्मार्ट खेती</div>
+  <p class="desc">AI-powered crop recommendations, soil health analysis, and live weather intelligence — built for every farmer, in every district of India.</p>
+  <a href="{{ url_for('auth.login') }}" class="btn btn-gold" style="margin-top:24px; font-size:1.1rem;">Get Started →</a>
+  <div class="scroll-hint"><i class="fa-solid fa-chevron-down"></i></div>
+</section>
+
+<section id="history">
+  <div class="container">
+    <div class="section-title">
+      <h2>India's Farming Journey</h2>
+      <p>From ancient river-valley agriculture to AI-driven precision farming.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="year">~2000 BCE</div>
+        <h4>Indus Valley Agriculture</h4>
+        <p>Early irrigation canals and plough farming along the Indus and its tributaries laid the foundation of organized agriculture in the subcontinent.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">1960s</div>
+        <h4>The Green Revolution</h4>
+        <p>High-yield seed varieties, chemical fertilizers, and irrigation expansion transformed India from a food-deficit to a food-surplus nation.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">1990s–2000s</div>
+        <h4>Liberalization & Diversification</h4>
+        <p>Market reforms encouraged horticulture, dairy, and export-oriented farming alongside traditional staple crops.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">Today</div>
+        <h4>Digital & Precision Farming</h4>
+        <p>Satellite data, IoT sensors, and AI-driven advisories like KrishiMitra now help farmers make sharper, data-backed decisions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-strip">
+  <div class="container">
+    <div class="grid grid-3">
+      <div><div class="stat-num">58%</div><div class="stat-label">of India's workforce is engaged in agriculture</div></div>
+      <div><div class="stat-num">140M</div><div class="stat-label">hectares of net farmland under cultivation</div></div>
+      <div><div class="stat-num">₹20L Cr</div><div class="stat-label">approximate contribution to India's GDP</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="trends">
+  <div class="container">
+    <div class="section-title">
+      <h2>Where Indian Agriculture Is Headed</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card trend-card"><i class="fa-solid fa-satellite-dish"></i><h4>Precision Farming</h4><p>Sensor and satellite data guide exact input use for water, fertilizer, and pesticide.</p></div>
+      <div class="card trend-card"><i class="fa-solid fa-helicopter"></i><h4>Drone Usage</h4><p>Drones are increasingly used for spraying, crop health mapping, and yield estimation.</p></div>
+      <div class="card trend-card"><i class="fa-solid fa-leaf"></i><h4>Organic Growth</h4><p>Rising demand for chemical-free produce is driving organic certification and export interest.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="news" style="background:#fff;">
+  <div class="container">
+    <div class="section-title">
+      <h2>Farming News</h2>
+      <p>Latest headlines on Indian agriculture.</p>
+    </div>
+    <div id="news-grid" class="grid grid-3">
+      <div class="card"><div class="loader"></div> Loading news…</div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+    <div class="section-title">
+      <h2>What KrishiMitra Offers</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card feature-card"><i class="fa-solid fa-seedling"></i><h4>Crop Recommendation</h4><p>AI ensemble model suggests the top crops for your soil, season, and district.</p></div>
+      <div class="card feature-card"><i class="fa-solid fa-flask"></i><h4>Soil Analysis</h4><p>Get a soil health score and actionable fertilizer/lime guidance.</p></div>
+      <div class="card feature-card"><i class="fa-solid fa-cloud-sun-rain"></i><h4>Weather Intelligence</h4><p>Live forecasts, frost/drought alerts, and a seasonal sowing calendar.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p style="color:#fff; font-size:1.1rem; margin-bottom:8px;">🌾 KrishiMitra — Feeding India, One Smart Farm at a Time</p>
+  <a href="{{ url_for('auth.login') }}">Login / Register →</a>
+</footer>
+
+<script>
+async function loadNews() {
+  const grid = document.getElementById('news-grid');
+  try {
+    const res = await fetch('/api/news');
+    const data = await res.json();
+    const articles = (data.articles || []).slice(0, 6);
+    if (!articles.length) { grid.innerHTML = '<p>No news available right now.</p>'; return; }
+    grid.innerHTML = articles.map(a => `
+      <div class="card news-card">
+        ${a.image ? `<img src="${a.image}" alt="">` : ''}
+        <div class="body">
+          <div class="source">${(a.source && a.source.name) || 'News'}</div>
+          <h4>${a.title}</h4>
+          <div class="date">${a.publishedAt ? new Date(a.publishedAt).toLocaleDateString() : ''}</div>
+          <a href="${a.url}" target="_blank" rel="noopener">Read More →</a>
+        </div>
+      </div>
+    `).join('');
+  } catch (e) {
+    grid.innerHTML = '<p>Could not load news right now.</p>';
+  }
+}
+loadNews();
+</script>
+</body>
+</html>

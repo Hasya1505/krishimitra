@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather Intelligence — KrishiMitra</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    color: #fff; padding: 28px; border-radius: var(--radius); margin-bottom: 24px;
+  }
+  .page-header h2 { color: #fff; margin-bottom: 4px; }
+  .page-header p { color: #dcefe1; margin: 0; }
+  .search-row { display: flex; gap: 12px; margin-bottom: 20px; }
+  .search-row input { flex: 1; }
+  #map { height: 380px; border-radius: var(--radius); }
+  .forecast-strip { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; }
+  .forecast-card { min-width: 110px; text-align: center; flex-shrink: 0; }
+  .forecast-card .day { font-weight: 600; font-size: 0.85rem; }
+  .forecast-card i { font-size: 1.6rem; color: var(--green-mid); margin: 8px 0; }
+  .alert-card { display:flex; gap:12px; align-items:flex-start; padding: 14px; border-radius: 8px; margin-bottom: 10px; }
+  .alert-danger { background: #fde2e1; }
+  .alert-warning { background: #fdf1de; }
+  .alert-ok { background: #dcf5e3; }
+  .current-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap: 16px; text-align:center; }
+  .current-grid .value { font-size:1.5rem; font-weight:700; color:var(--green-mid); }
+  .current-grid .label { font-size:0.8rem; color:var(--text-secondary); }
+</style>
+</head>
+<body>
+<div class="container" style="padding-top:24px; padding-bottom: 40px;">
+  <div class="page-header">
+    <h2><i class="fa-solid fa-cloud-sun-rain"></i> Weather Intelligence</h2>
+    <p>Live weather, agricultural alerts, and a sowing calendar for your location.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="search-row">
+      <input type="text" id="city-search" placeholder="Search a city, e.g. Surat, Gujarat">
+      <button id="search-btn" class="btn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+      <button id="locate-btn" class="btn btn-outline"><i class="fa-solid fa-location-crosshairs"></i> Use My Location</button>
+    </div>
+    <div id="current-weather">
+      <p>Detecting your location…</p>
+    </div>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:20px;">
+    <div class="card">
+      <h4>7-Day Forecast</h4>
+      <div id="forecast-strip" class="forecast-strip"><p>Loading…</p></div>
+    </div>
+    <div class="card">
+      <h4>Agricultural Alerts</h4>
+      <div id="alerts-box"><p>Loading…</p></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <h4>India Weather Map</h4>
+    <div id="map"></div>
+  </div>
+
+  <div class="card">
+    <h4><i class="fa-solid fa-calendar-days"></i> Sowing Calendar — What to Sow Now</h4>
+    <div id="sowing-box" class="grid grid-3"><p>Loading…</p></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='js/weather.js') }}"></script>
+</body>
+</html>
