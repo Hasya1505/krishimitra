@@ -1,1 +1,149 @@
+/* ==========================================================================
+   KrishiMitra — Global Design System
+   ========================================================================== */
+:root {
+  --green-dark: #1a4d2e;
+  --green-mid: #2d7a45;
+  --green-light: #4a9e5c;
+  --gold: #c8a951;
+  --cream: #f5f0e8;
+  --white: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #555555;
+  --danger: #c0392b;
+  --warning: #d98324;
+  --ok: #2d7a45;
+  --radius: 12px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
 
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: var(--cream);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 600;
+  color: var(--green-dark);
+  margin: 0 0 0.5em;
+}
+
+p { color: var(--text-secondary); margin: 0 0 1em; }
+
+a { color: var(--green-mid); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.btn {
+  display: inline-block;
+  background: var(--green-mid);
+  color: var(--white) !important;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  text-decoration: none;
+}
+.btn:hover { background: var(--green-dark); transform: translateY(-1px); text-decoration: none; }
+.btn-gold { background: var(--gold); color: var(--text-primary) !important; }
+.btn-gold:hover { background: #b8963f; }
+.btn-outline { background: transparent; border: 2px solid var(--green-mid); color: var(--green-mid) !important; }
+.btn-outline:hover { background: var(--green-mid); color: var(--white) !important; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  width: 100%;
+  transition: border-color 0.2s ease;
+  background: var(--white);
+  color: var(--text-primary);
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--green-mid);
+}
+label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 6px;
+}
+.field { margin-bottom: 18px; }
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.badge-kharif { background: #dbeafe; color: #1e40af; }
+.badge-rabi { background: #fed7aa; color: #9a3412; }
+.badge-zaid { background: #fef9c3; color: #854d0e; }
+
+.progress-track {
+  background: #e5e5e5;
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+  width: 100%;
+}
+.progress-fill {
+  background: linear-gradient(90deg, var(--green-mid), var(--green-light));
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+.container { max-width: 1150px; margin: 0 auto; padding: 0 24px; }
+
+.grid { display: grid; gap: 20px; }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+.flash {
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+.flash-error { background: #fde2e1; color: var(--danger); }
+.flash-ok { background: #dcf5e3; color: var(--ok); }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: var(--green-light); border-radius: 4px; }
+
+.loader {
+  border: 3px solid #e5e5e5;
+  border-top: 3px solid var(--green-mid);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 720px) {
+  .container { padding: 0 16px; }
+}
