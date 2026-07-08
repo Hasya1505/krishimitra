@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+database/krishimitra.db
+.DS_Store
+venv/
+.venv/
